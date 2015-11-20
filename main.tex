@@ -3,8 +3,8 @@
 \usepackage[]{multicol}
 \usepackage[auth-lg]{authblk}
 \usepackage[margin=1.4in]{geometry}
-\usepackage[]{natbib}
 \usepackage[]{graphicx}
+\usepackage[]{ctable}
 
 \title{Dynamic Programming in RNA Folding Software and Improvements to the Current Regime}
 
@@ -32,14 +32,17 @@ Finding the secondary structure of RNA is important for understanding how RNA wi
 \par These results show us that ... for natively differentiating between mfold and Vienna. They also help explain that both pieces of software can experience significant speed increases if they implemented the Frid-Gusfield method. Furthermore the authors of this paper would recommend both software packages to support GPU hardware to achieve even greater speed gains when inside a parallel capable environment.
 
 \section{Methods}
-Benchmarking is renown as a difficult thing to perform effectively\cite{sysperformance,eulogy}. There are so many things that can be going on in a computer at any one moment that it is completely possible that a benchmark can give inaccurate information due to a conflicting process running on the computer\cite{sysperformance}. As a result we used a machine in the cloud provided by ... with the following specifications
-\begin{enumerate}
-    \item Architecture / CPU
-    \item Compiler/Interpreter
-    \item Application
-    \item IO ops
-    \item Time
-\end{enumerate}
+Benchmarking is renown as a difficult thing to perform effectively\cite{sysperformance,eulogy}. There are so many things that can be going on in a computer at any one moment that it is completely possible that a benchmark can give inaccurate information due to a conflicting process running on the computer\cite{sysperformance}. We standardized on the following specifications for our runs:
+\begin{center}
+    \begin{tabular}{ccc}
+        \specialrule{.1em}{.05em}{.05em}
+        \textbf{Architecture} & \textbf{Operating System} & \textbf{Compiler} \\ \hline
+        blah & Linux & GCC \\ \hline
+        " & " & fort77 \\ \hline
+        " & " & python3 \\
+        \specialrule{.1em}{.05em}{.05em}
+    \end{tabular}
+\end{center}
 Our testing required no internet connectivity besides the ssh access required to initiate our testing so all calculations were performed locally. Furthermore there were few I/O read/writes required as we will show so there is very little chance that I/O was a factor on our results.
 
 \subsection{Micro-benchmarks}
