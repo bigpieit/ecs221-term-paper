@@ -24,7 +24,7 @@ Finding the secondary structure of RNA is important for understanding how RNA wi
 \begin{figure}[h!]
   \centering
   \includegraphics[keepaspectratio, scale=0.12]{fold-example.png}
-  \caption{Number of RSUs that each vehicle has encountered}
+  \caption{Example of an RNA molecule folding}
   \label{fig:RSUencountered}
 \end{figure}
 \par Our paper focuses on benchmarking 2D secondary structure prediction software based off the Nussinov dynamic programming algorithm\cite{nussinov} for RNA folding. This algorithm is $O(n^3)$ time complexity. There have been multiple attempts to parallelize the Nussinov algorithm[!CITE!] which have resulted in large speed increases, however, CPU intensive algorithms only slightly lowered the bound up until 2011[!CITE!]. In 2011 the Nussinov bound that was improved by the Frid-Gusfield Four Russians method which established you could perform the DP method in $O(\frac{n^3}{log(n)})$ time\cite{gusfield}. Later a parallel method of the Four Russians algorithm presented proof that you can lower this bound to $O(\frac{n^2}{log(n)})$ inside an NVIDIA CUDA environment\cite{balaji}.
@@ -37,9 +37,22 @@ Benchmarking is renown as a difficult thing to perform effectively\cite{sysperfo
     \begin{tabular}{ccc}
         \specialrule{.1em}{.05em}{.05em}
         \textbf{Architecture} & \textbf{Operating System} & \textbf{Compiler} \\ \hline
-        blah & Linux & GCC \\ \hline
-        " & " & fort77 \\ \hline
-        " & " & python3 \\
+        blah & Linux & GCC xx \\ \hline
+        " & " & Fortran 77 \\ \hline
+        " & " & python3 \\ \hline
+        " & " & NVIDIA CUDA \\
+        \specialrule{.1em}{.05em}{.05em}
+    \end{tabular}
+\end{center}
+We then used the following applications and versions in our test runs:
+\begin{center}
+    \begin{tabular}{ccc}
+        \specialrule{.1em}{.05em}{.05em}
+        \textbf{Application} & \textbf{Version} & \textbf{Requirements} \\ \hline
+        mfold & 3.6 & GCC, Fortran \\ \hline
+        RNAfold Vienna  & xxx & GCC \\ \hline
+        Frid-Gusfield Four Russians & N/A & python3 ?? \\ \hline
+        Parallel Four Russians & N/A & GCC, NVIDIA CUDA \\
         \specialrule{.1em}{.05em}{.05em}
     \end{tabular}
 \end{center}
