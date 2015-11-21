@@ -6,6 +6,8 @@
 \usepackage[]{graphicx}
 \usepackage[]{ctable}
 \usepackage[]{natbib}
+\usepackage[]{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 
 \title{Dynamic Programming in RNA Folding Software and Improvements to the Current Regime}
 
@@ -35,10 +37,10 @@ Finding the secondary structure of RNA is important for understanding how RNA wi
 \section{Methods}
 Benchmarking is renown as a difficult thing to perform effectively\cite{sysperformance,eulogy}. There are many processes that can be executing on a computer at any one moment that it is possible that a benchmark can give inaccurate information due to conflicting processes running in the background\cite{sysperformance}. As a result we used a machine solely dedicated for benchmarking and no other tasks. We also standardized on the following specifications for our runs\cite{benchspecs}:
 \begin{center}
-    \begin{tabular}{ccc}
+    \begin{tabular}{P{5.0cm}P{3.5cm}P{3.0cm}}
         \specialrule{.1em}{.05em}{.05em}
         \textbf{Architecture} & \textbf{Operating System} & \textbf{Compiler} \\ \hline
-        8 core Intel i7 \\ CPU 4.00 GHz \\16G RAM\\ GeForce GTX 960 & Linux 4.2.5-201 Fedora 22 & GCC 5.1.1-4.fc22 \\ \hline
+        8 core Intel i7 CPU 4.00 GHz 16G RAM GeForce GTX 960 & Linux 4.2.5-201 Fedora 22 & GCC 5.1.1-4.fc22 \\ \hline
         " & " & gcc-gfortran 5.1.1-4.fc22\\ \hline
         " & " & NVIDIA CUDA version 5.5 \\
         \specialrule{.1em}{.05em}{.05em}
