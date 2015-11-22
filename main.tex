@@ -70,32 +70,17 @@ We used the following applications with corresponding versions and requirements 
 \end{figure}
 
 \subsection{Data Inputs}
-\par For input data we give inputs of RNA as strings in a file. An example of this would be the 10 character RNA string AUGCCAUGGA. This same RNA sequence can be treated as circular by providing parameters to the mfold and RNAfold Vienna programs that tell it the RNA is circular.
+\par For input data we give inputs of RNA as strings in a file. An example of this would be the 10 character RNA string AUGCCAUGGA. This same RNA sequence can be treated as circular by providing parameters to the mfold and RNAfold Vienna programs that tell it the RNA is circular\cite{mfold-manual, vienna-manual}.
 \subsection{Application Benchmarks}
 The first type of benchmark we perform is the application level benchmark. An application benchmark is designed to measure the performance of an entire application and the resources it consumes on an individual machine\cite{jain}. In our case we wish to evaluate the amount of time that mfold and RNAfold Vienna take to return RNA secondary structures given different length RNA strands varying on linear and circular variety. Since a single run of an application may vary in time even for identical inputs. Because of this we evaluate each input of RNA 30 times and report the mean $\mu$, standard deviation, $\sigma^2$, of the runs corresponding to each sequence length.
 
 \subsection{Micro-benchmarks}
 \par The most basic type of benchmark to perform is the micro-benchmark. The micro-benchmark is a single piece of code executed many times in serial so that we can get a profile of its run characteristics\cite{eulogy,sysperformance}. Once these characteristics are observed we can then make inferences about its performance and ways that it can be improved. Micro-benchmarks have the downside of losing generality of performance across the entire application\cite{eulogy, sysperformance}. A good example of this is if an IO heavy function made many consecutive calls to the \textit{read} function on the OS while the rest of the application made no calls to \textit{read} whatsoever. If we tried to generalize this one function to the rest of the application we would misguidedly attempt to optimize disk IO across our entire system.
 \par We avoid this trap in our paper by benchmarking only parts of the code that execute the Nussinov algorithm in mfold and the Vienna package. We then report these results back to our test results database for later analysis. After this we compare these results to runs of the serial Frid-Gusfield algorithm and parallel Frid-Gusfield algorithm.
-\par For this section we use TODO DATA
 
-\subsection{Four-russian Algorithm}
-Four-russian Algorithm \cite{gusfield} is a two-vector algorithm to improve the above-mentioned Dynamic Programming Algorithm. In 2010, it is reported that Frid and Gusfield designed an $O(\frac{n^3}{\log n})$ algorithm for RNA folding using the Four-Russians technique, which is an advance compared $O(n^3)$ Nussinov algorithm.
-
-To apply the Four-Russians technique we start with the following observation: the values along a column from bottom to top and along a row from left to right are monotonically non-decreasing. Consecutive cells differ at most by 1. Once the cells $D(i,l), D(i,l+1), ..., D(i,l+q-1)$ are computed, for some $l \in \{i,...,j - q\}$, they can be represented by $D(i,l) + V_0, D(i,l) + V_1, ..., D(i,l) + V_{q-1}$, where $V_p=D(i,l+p)$, for $p \in \{0,...,q-1\}$. Let us define, $v_0 = 0$ and $v_p = V_p - V_{p-1}$, for $p \in \{1,...,q-1\}$. From lemma 3.1, $v_p \in \{0,1\}$, for all $p \in[0,q-1]$. Let v denote the binary vector $v_0, v_1, . . . , v_{q-1}$ of differences and let V denote the vector of running totals $V_0, V_1, . . . , V_{q-1}$. 
-
-Since the $v_p’s$ are defined from $V_p’s$, the inverse function is well defined: $V_p = \sum^p_{k=0} v_k$. Thus $D(i,l)$ together with the vector $v$ represents $q$ consecutive cells of the table. Similarly, since the values are non-increasing down a column, $D(i+l+1,j),...,D(i+l+q,j)$ be represented by the pair $D(i+l+1,j),\bar{v}$,where $\bar{v}\in\{0,-1\}^q$.The corresponding vector of cumulative sums is denoted $\bar{v}$. We call $v$ the horizontal difference vector or the horizontal vector and we call $\bar{v}$ the vertical difference vector or the column vector.
-
-Thus the $D(i,j)$ can be expressed as:
-
-\begin{eqnarray*}
-D(i,j)  &\leftarrow& \max \limits_{l+1\leq k \leq l+q} D(i,k-1)+D(k,j)\\
-        &\leftarrow& \max \limits_{l+1\leq k \leq l+q} D(i,l)+V_k+D(i+l+1)+\bar{V}_k\\
-        &\leftarrow& D(i,l)++D(i+l+1,j) + \max \limits_{l+1\leq k \leq l+q}V_k+\bar{V}_k
-\end{eqnarray*}
-
-By pre-processing this computation over all possible $v$ and $\bar{v}$ vectors and tabulate the results in $R$, the maximum value of  Table $R$ is indexed by a pair of numbers in the range $[2q]$ to represent the two vectors $(v, \bar{v})$. The $\max \limits_{l+1\leq k \leq l+q}V_k+\bar{V}_k$ can be determined through table lookup, which will take constant time. The operation as it fetches the max and arg max values rivals the re-calculation in Nussinov Algorithm. And this fetch will be of great advantages to the exhaustive enumeration in DP algorithm.
-
+\subsection{Frid-Gusfield Four-Russians Algorithm}
+\par The Four-Russians Algorithm \cite{gusfield} is a two-vector algorithm to improve the above-mentioned Nussinov $O(n^3)$ Algorithm. The Frid and Gusfield is an $O(\frac{n^3}{\log n})$ algorithm.
+\par The Four Russian algorithm achieves this speed up by understanding that we can make certain optimizations to the matrix of matching base pairs required by the Nussinov algorithm. Particularly, the values along a column from bottom to top and along a row from left to right are monotonically non-decreasing. Consecutive cells differ at most by 1\cite{gusfield}. As a result we can perform pre-processing of specific operations that the Nussinov algorithm must compute manually.
 
 \section{Results}
 
@@ -176,7 +161,7 @@ SIAM J Comput 2010, 39(5):2075-2089
 \bibitem{eulogy}
 Cantrill B.
 \textit{Eulogy for a benchmark}.
-http://dtrace.org/blogs/bmc/2009/02/02/eulogy-for-a-benchmark/.
+The Observation Deck Web. http://dtrace.org/blogs/bmc/2009/02/02/eulogy-for-a-benchmark/.
 2009.
 
 \bibitem{rizk}
@@ -194,12 +179,23 @@ Hofacker I, Stadler P.
 \textit{Memory efficient folding algorithms for circular RNA secondary structures}.
 Bioinformatics (2006) 22 (10): 1172-1176.
 
+\bibitem{mfold-manual}
+Zuker M, Matthews D.H, Turner D.H.
+\textit{Algorithms and Thermodynamics for RNA
+Secondary Structure Prediction:
+a Practical Guide}.
+The mfold Web Server Web. http://unafold.rna.albany.edu/doc/mfold-manual/mfold-3.0-manual.pdf.gz.
+
+\bibitem{vienna-manual}
+Hofacker I, Fontana W, Bonhoeffer S, Stadler P.F, Lorenz R.
+\textit{RNAFOLD}.
+Theoretical Biochemistry Group Institute for Theoretical Chemistry Web. https://www.tbi.univie.ac.at/RNA/RNAfold.1.html#heading5
+
 \bibitem{jain}
 Jain, R.
-\textit{Art of Computer Systems Performance Analysis Techniques For Experimental Design
-Measurements Simulation And Modeling}.
+\textit{Art of Computer Systems Performance Analysis Techniques For Experimental Design Measurements Simulation And Modeling}.
 Wiley Computer Publishing, John Wiley & Sons, Inc.
-ISBN: 0471503363 Pub Date: 05/01/91
+ISBN: 0471503363 Pub Date: 05/01/91.
 
 \end{thebibliography}
 
