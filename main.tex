@@ -79,8 +79,7 @@ The first type of benchmark we perform is the application level benchmark. An ap
 \par We avoid this trap in our paper by benchmarking only parts of the code that execute the Nussinov algorithm in mfold and the Vienna package. We then report these results back to our test results database for later analysis. After this we compare these results to runs of the serial Frid-Gusfield algorithm and parallel Frid-Gusfield algorithm.
 
 \subsection{Frid-Gusfield Four-Russians Algorithm}
-\par The Four-Russians Algorithm \cite{gusfield} is a two-vector algorithm to improve the above-mentioned Nussinov $O(n^3)$ Algorithm. The Frid and Gusfield is an $O(\frac{n^3}{\log n})$ algorithm.
-\par The Four Russian algorithm achieves this speed up by understanding that we can make certain optimizations to the matrix of matching base pairs required by the Nussinov algorithm. Particularly, the values along a column from bottom to top and along a row from left to right are monotonically non-decreasing. Consecutive cells differ at most by 1\cite{gusfield}. As a result we can perform pre-processing of specific operations that the Nussinov algorithm must compute manually.
+\par The Four-Russians Algorithm \cite{gusfield} is a two-vector algorithm to improve the above-mentioned Nussinov $O(n^3)$ Algorithm. The Frid and Gusfield is an $O(\frac{n^3}{\log n})$ algorithm. The Four Russian algorithm achieves this speed up by understanding that we can make certain optimizations to the matrix of matching base pairs required by the Nussinov algorithm. Particularly, the values along a column from bottom to top and along a row from left to right are monotonically non-decreasing. Consecutive cells differ at most by 1\cite{gusfield}. As a result we can perform pre-processing of specific operations that the Nussinov algorithm must compute manually.
 
 \section{Results}
 
