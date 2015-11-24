@@ -79,10 +79,35 @@ The first type of benchmark we perform is the application level benchmark. An ap
 \par We avoid this trap in our paper by benchmarking only parts of the code that execute the Nussinov algorithm in mfold and the Vienna package. We then report these results back to our test results database for later analysis. After this we compare these results to runs of the serial Frid-Gusfield algorithm and parallel Frid-Gusfield algorithm.
 
 \subsection{Frid-Gusfield Four-Russians Algorithm}
-\par The Four-Russians Algorithm \cite{gusfield} is a two-vector algorithm to improve the above-mentioned Nussinov $O(n^3)$ Algorithm. The Frid and Gusfield is an $O(\frac{n^3}{\log n})$ algorithm.
+\par The Four-Russians Algorithm \cite{gusfield} is an algorithm to improve the above-mentioned Nussinov $O(n^3)$ Algorithm by Four-Russian method. The Frid and Gusfield is an $O(\frac{n^3}{\log n})$ algorithm.
 \par The Four Russian algorithm achieves this speed up by understanding that we can make certain optimizations to the matrix of matching base pairs required by the Nussinov algorithm. Particularly, the values along a column from bottom to top and along a row from left to right are monotonically non-decreasing. Consecutive cells differ at most by 1\cite{gusfield}. As a result we can perform pre-processing of specific operations that the Nussinov algorithm must compute manually.
 
+\subsection{CUDA Parallel Implementation for F-G Method}
+\par Compute Unified Device Architecture (CUDA) is a parallel computing platform created by NVIDIA. By using CUDA API, in Venkatachalam B \cite{balaji}, an $O(\frac{n^2}{logn})$ algorithm for RNA folding is presented.
+\par The CUDA implementation parallelizes the two-vector method so that achieve an enhancement of another factor of $O(logn)$ \cite{balaji}. 
+
 \section{Results}
+The timing for Nussinov, FG and CUDA Four-Russian algorithms are listed below with different sizes of RNA sequences.\\
+\begin{tabular}{ |p{1.5cm}||p{1.2cm}|p{1.3cm}|p{1.3cm}|p{1.4cm}|p{1.4cm}|p{1.4cm}|p{1.6cm}|  }
+ \hline
+ \multicolumn{8}{|c|}{Timing of Algorithms for RNA Folding (sec.)} \\
+ \hline
+ Size& 500& 1000& 2000& 3000& 4000& 5000& 6000\\
+ \hline
+ Nussinov& 0.2790& 2.0751& 16.7033& 57.8146& 145.2998& 301.4874&	519.6531\\
+ FG& 0.0903& 0.6092& 5.5868& 19.6117& 49.3309& 95.6461& 162.9072\\
+ CUDA& 0.0088& 0.1988& 0.4690& 1.1943& 2.5817& 4.8506& 8.2735\\
+ \hline
+\end{tabular}\\
+\\
+\\
+The data are plotted visually as below:
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[keepaspectratio, scale=.92]{algorithmGraph.png}
+  \caption{Timing of Algorithms for RNA Folding (sec.)}
+  \label{fig:Timing_Algorithm}
+\end{figure}
 
 \section{Discussion}
 \begin{thebibliography}{56}
@@ -189,12 +214,12 @@ The mfold Web Server Web. http://unafold.rna.albany.edu/doc/mfold-manual/mfold-3
 \bibitem{vienna-manual}
 Hofacker I, Fontana W, Bonhoeffer S, Stadler P.F, Lorenz R.
 \textit{RNAFOLD}.
-Theoretical Biochemistry Group Institute for Theoretical Chemistry Web. https://www.tbi.univie.ac.at/RNA/RNAfold.1.html#heading5
+Theoretical Biochemistry Group Institute for Theoretical Chemistry Web. https://www.tbi.univie.ac.at/RNA/RNAfold.1.html\#heading5
 
 \bibitem{jain}
 Jain, R.
 \textit{Art of Computer Systems Performance Analysis Techniques For Experimental Design Measurements Simulation And Modeling}.
-Wiley Computer Publishing, John Wiley & Sons, Inc.
+Wiley Computer Publishing, John Wiley \& Sons, Inc.
 ISBN: 0471503363 Pub Date: 05/01/91.
 
 \end{thebibliography}
