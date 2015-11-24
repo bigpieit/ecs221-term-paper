@@ -172,8 +172,7 @@ As a result we can perform pre-processing of specific operations that the
 Nussinov algorithm must compute manually.
 
 \subsection{CUDA Parallel Implementation for F-G Method}
-\par Compute Unified Device Architecture (CUDA) is a parallel computing platform created by NVIDIA. By using CUDA API, in Venkatachalam B \cite{balaji}, an $O(\frac{n^2}{logn})$ algorithm for RNA folding is presented.
-\par The CUDA implementation parallelizes the two-vector method so that achieve an enhancement of another factor of $O(logn)$ \cite{balaji}. 
+\par Compute Unified Device Architecture (CUDA) is a parallel computing platform created by NVIDIA. By using CUDA API, Venkatachalam presented an $O(\frac{n^2}{logn})$ algorithm for RNA folding is presented \cite{balaji}. The CUDA implementation parallelizes the two-vector method so that achieve an enhancement of another factor of $O(n)$.
 
 \section{Results}
 The timing for Nussinov, FG and CUDA Four-Russian algorithms are listed below with different sizes of RNA sequences.\\
@@ -183,8 +182,8 @@ The timing for Nussinov, FG and CUDA Four-Russian algorithms are listed below wi
  \hline
  Size& 500& 1000& 2000& 3000& 4000& 5000& 6000\\
  \hline
- Nussinov& 0.2790& 2.0751& 16.7033& 57.8146& 145.2998& 301.4874&	519.6531\\
- FG& 0.0903& 0.6092& 5.5868& 19.6117& 49.3309& 95.6461& 162.9072\\
+ Nussinov& 0.2790& 2.0751& 16.7033& 57.8146& 145.2998& 301.4874& 519.6531\\
+ Frid-Gusfield& 0.0903& 0.6092& 5.5868& 19.6117& 49.3309& 95.6461& 162.9072\\
  CUDA& 0.0088& 0.1988& 0.4690& 1.1943& 2.5817& 4.8506& 8.2735\\
  \hline
 \end{tabular}\\
