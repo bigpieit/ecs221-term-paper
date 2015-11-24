@@ -9,7 +9,7 @@
 \usepackage[]{array}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 
-\title{Dynamic Programming in RNA Folding Software and Improvements to the Current Regime}
+\title{Benchmarking Current RNA Folding Software and Improvements to the Current Regime}
 
 \begin{document}
 \author{Jianglin Liu}
@@ -20,7 +20,15 @@
 \maketitle
 
 \begin{abstract}
-Finding the secondary structure of RNA is important for understanding how RNA will interact in a cell. Frequently computational algorithms are used to determine structure due to difficulties extracting good \textit{in vivo} data of RNA structures. Many of the algorithms for RNA folding are computationally complex. In this paper we establish benchmarks for two commonly used RNA folding packages, mfold, and RNAfold Vienna, and compare them to an improved Four-Russians folding algorithm. We show ... These results will help software maintainers to understand the benefit of updating their algorithms. The results will also help guide users when choosing RNA folding software when looking for the most computationally optimal package.
+Finding the secondary structure of RNA is important for understanding how RNA
+will interact in a cell. Frequently computational algorithms are used to determine
+structure due to difficulties extracting good \textit{in vivo} data of RNA
+structures. Many of the algorithms for RNA folding are computationally complex.
+In this paper we establish benchmarks for two commonly used RNA folding packages,
+mfold, and RNAfold Vienna, and compare them to an improved Four-Russians folding
+algorithm. We show ... These results will help software maintainers to understand
+the benefit of updating their algorithms. The results will also help guide users
+when choosing RNA folding software when looking for the most computationally optimal package.
 \end{abstract}
 \section{Introduction}
 \par RNA is an essential macromolecule used in protein formation and performs other essential functions within the body\cite{turner}. RNA does not stay in single stranded form and instead folds on itself to create the lowest energy conformation possible to ensure thermodynamic stability\cite{herschlag}. When folding, RNA forms a 2D secondary structure\cite{mccaskill} with A matching to U and G to C (figure 1).  Using this data we can find a 3D tertiary structure\cite{mccaskill}.
@@ -30,15 +38,56 @@ Finding the secondary structure of RNA is important for understanding how RNA wi
   \caption{Example of an RNA molecule folding}
   \label{fig:RNA Folding}
 \end{figure}
-\par Our paper focuses on benchmarking 2D secondary structure prediction software based off the Nussinov dynamic programming algorithm\cite{nussinov} for RNA folding. This algorithm is $O(n^3)$ time complexity. There have been multiple attempts to parallelize the Nussinov algorithm\cite{rizk, other-gpu} which have resulted in large speed increases, however, CPU intensive algorithms only slightly lowered the bound up until 2010\cite{minor-nussinov-improvement, chan}. In 2010 the Nussinov bound that was improved by the Frid-Gusfield Four Russians method which established you could perform the DP method in $O(\frac{n^3}{log(n)})$ time\cite{gusfield}. Later a parallel method of the Four Russians algorithm presented proof that you can lower this bound to $O(\frac{n^2}{log(n)})$ inside an NVIDIA CUDA environment\cite{balaji}.
-\par There are two major RNA folding software packages, mfold\cite{zuker1989,zuker1981}, and the Vienna RNA Package\cite{vienna}. These both utilize the Nussimov method to return results of the RNA secondary structure by finding the lowest possible thermodynamic conformations of the RNA\cite{zuker1981,vienna}. In order to tell which was faster we performed application level benchmarks\cite{eulogy} to see which of these two applications could more quickly fold arbitrary length RNA of the circular and linear variety. The way mfold is written allows linear RNA to be treated as exceptional variants of circular ones\cite{circular}. RNAfold Vienna was initially optimized to only handle linear RNA\cite{circular} but later improvements enabled it to speed the folding of circular ones\cite{circular}. As a result we also wish to determine what kind of speed difference still exists between mfold and Vienna when performing analysis on circular RNA.
+\par Our paper focuses on benchmarking 2D secondary structure prediction software
+based off the Nussinov dynamic programming algorithm\cite{nussinov} for RNA folding.
+This algorithm is $O(n^3)$ time complexity. There have been multiple attempts to
+parallelize the Nussinov algorithm\cite{rizk, other-gpu} which have resulted in
+large speed increases, however, CPU intensive algorithms only slightly lowered
+the bound up until 2010\cite{minor-nussinov-improvement, chan}. In 2010 the
+Nussinov bound that was significantly improved by the Frid-Gusfield Four Russians
+method which established you could perform the DP method in $O(\frac{n^3}{log(n)})$
+time\cite{gusfield}. Later a parallel method of the Four Russians algorithm
+presented proof that you can lower this bound to $O(\frac{n^2}{log(n)})$ inside
+an NVIDIA CUDA environment\cite{balaji}.
+\par There are two major RNA folding software packages, mfold\cite{zuker1989,zuker1981},
+and the Vienna RNA Package\cite{vienna}. These both utilize the Nussimov method
+to return results of the RNA secondary structure by finding the lowest possible
+thermodynamic conformations of the RNA\cite{zuker1981,vienna}. In order to tell
+which was faster we performed application level benchmarks\cite{eulogy} to see
+which of these two applications could more quickly fold arbitrary length RNA of
+the circular and linear variety. The way mfold is written allows linear RNA to
+be treated as exceptional variants of circular ones\cite{circular}. RNAfold
+Vienna was initially optimized to only handle linear RNA\cite{circular} but
+later improvements enabled it to speed the folding of circular ones\cite{circular}.
+As a result we also wish to determine what kind of speed difference still exists
+between mfold and Vienna when performing analysis on circular RNA.
 
-\par We then performed micro-benchmarks\cite{sysperformance} of the folding algorithms utilized in mfold and Vienna for both circular and linear RNA, and then compared that to equivalent benchmarks for the Four Russians and parallel Four Russians algorithms. The first thing we found when comparing mfold and Vienna was ... . When we compared mfold and Vienna to the Four Russians algorithms we found that without a graphics card and parallel processing capabilities a machine can see speed ups of ... in mfold and ... in Vienna for linear RNA. For circular RNA speed increases change to ... in mfold and ... in Vienna. With a graphics card and parallel processing folding clusters can see increases of up to ... for mfold and ... in Vienna. Circular RNA also sees speed bumps of ... in mfold and ... in Vienna.
-\par These results show us that ... for natively differentiating between mfold and Vienna. They also help explain that both pieces of software can experience significant speed increases if they implemented the Frid-Gusfield method. Furthermore the authors of this paper would recommend both software packages to support GPU hardware to achieve even greater speed gains when inside a parallel capable environment.
+\par We then performed micro-benchmarks\cite{sysperformance} of the folding
+algorithms utilized in mfold and Vienna for both circular and linear RNA, and
+then compared that to equivalent benchmarks for the Four Russians and parallel
+Four Russians algorithms. The first thing we found when comparing mfold and
+Vienna was ... . When we compared mfold and Vienna to the Four Russians algorithms
+we found that without a graphics card and parallel processing capabilities a
+machine can see speed ups of ... in mfold and ... in Vienna for linear RNA. For
+circular RNA speed increases change to ... in mfold and ... in Vienna. With a
+graphics card and parallel processing folding clusters can see increases of up
+to ... for mfold and ... in Vienna. Circular RNA also sees speed bumps of ... in
+mfold and ... in Vienna.
+\par These results show us that ... for natively differentiating between mfold
+and Vienna. They also help explain that both pieces of software can experience
+significant speed increases if they implemented the Frid-Gusfield method. Furthermore
+the authors of this paper would recommend both software packages to support GPU
+hardware to achieve even greater speed gains when inside a parallel capable
+environment.
 
 \section{Methods}
 \subsection{Standardizing the Testing Environment}
-Benchmarking is renown as a difficult thing to perform effectively\cite{sysperformance,eulogy}. There are many processes that can be executing on a computer at any one moment that it is possible that a benchmark can give inaccurate information due to conflicting processes running in the background\cite{sysperformance}. As a result we used a machine solely dedicated for benchmarking and no other tasks. We also standardized on the following specifications for our runs\cite{benchspecs}:
+Benchmarking is renown as a difficult thing to perform effectively\cite{sysperformance,eulogy}.
+There are many processes that can be executing on a computer at any one moment
+that it is possible that a benchmark can give inaccurate information due to
+conflicting processes running in the background\cite{sysperformance}. As a result
+we used a machine solely dedicated for benchmarking and no other tasks. We also
+standardized on the following specifications for our runs\cite{benchspecs}:
 \begin{center}
     \begin{tabular}{P{5.0cm}P{3.5cm}P{3.0cm}}
         \specialrule{.1em}{.05em}{.05em}
@@ -61,7 +110,12 @@ We used the following applications with corresponding versions and requirements 
         \specialrule{.1em}{.05em}{.05em}
     \end{tabular}
 \end{center}
-\par Our testing architecture was laid out where we would SSH into the benchmarking machine and then execute tests. Test results would then be reported back to the user's central machine where they could be stored in a database for later analysis (figure 2). Our testing required no internet connectivity besides the ssh access required to initiate our testing so all calculations were performed locally. Also there were no IO operations except for post processing of mfold and Vienna results.
+\par Our testing architecture was laid out where we would SSH into the benchmarking
+machine and then execute tests. Test results would then be reported back to the
+user's central machine where they could be stored in a database for later analysis
+(figure 2). Our testing required no internet connectivity besides the ssh access
+required to initiate our testing so all calculations were performed locally. Also
+there were no IO operations except for post processing of mfold and Vienna results.
 \begin{figure}[ht!]
   \centering
   \includegraphics[keepaspectratio, scale=0.7]{benchmarking-architecture.png}
@@ -70,17 +124,52 @@ We used the following applications with corresponding versions and requirements 
 \end{figure}
 
 \subsection{Data Inputs}
-\par For input data we give inputs of RNA as strings in a file. An example of this would be the 10 character RNA string AUGCCAUGGA. This same RNA sequence can be treated as circular by providing parameters to the mfold and RNAfold Vienna programs that tell it the RNA is circular\cite{mfold-manual, vienna-manual}.
+\par For input data we give inputs of RNA as strings in a file. An example of this
+would be the 10 character RNA string AUGCCAUGGA. This same RNA sequence can be
+treated as circular by providing parameters to the mfold and RNAfold Vienna
+programs that tell it the RNA is circular\cite{mfold-manual, vienna-manual}.
 \subsection{Application Benchmarks}
-The first type of benchmark we perform is the application level benchmark. An application benchmark is designed to measure the performance of an entire application and the resources it consumes on an individual machine\cite{jain}. In our case we wish to evaluate the amount of time that mfold and RNAfold Vienna take to return RNA secondary structures given different length RNA strands varying on linear and circular variety. Since a single run of an application may vary in time even for identical inputs. Because of this we evaluate each input of RNA 30 times and report the mean $\mu$, standard deviation, $\sigma^2$, of the runs corresponding to each sequence length.
+\par The first type of benchmark we perform is the application level benchmark.
+An application benchmark is designed to measure the performance of an entire
+application and the resources it consumes on an individual machine\cite{jain}.
+In our case we wish to evaluate the amount of time that mfold and RNAfold Vienna
+take to return RNA secondary structures given different length RNA strands varying
+on linear and circular variety. Since a single run of an application may vary in
+time even for identical inputs. Because of this we evaluate each input of RNA 30
+times and report the mean $\mu$, standard deviation, $\sigma^2$, of the runs
+corresponding to each sequence length.
 
 \subsection{Micro-benchmarks}
-\par The most basic type of benchmark to perform is the micro-benchmark. The micro-benchmark is a single piece of code executed many times in serial so that we can get a profile of its run characteristics\cite{eulogy,sysperformance}. Once these characteristics are observed we can then make inferences about its performance and ways that it can be improved. Micro-benchmarks have the downside of losing generality of performance across the entire application\cite{eulogy, sysperformance}. A good example of this is if an IO heavy function made many consecutive calls to the \textit{read} function on the OS while the rest of the application made no calls to \textit{read} whatsoever. If we tried to generalize this one function to the rest of the application we would misguidedly attempt to optimize disk IO across our entire system.
-\par We avoid this trap in our paper by benchmarking only parts of the code that execute the Nussinov algorithm in mfold and the Vienna package. We then report these results back to our test results database for later analysis. After this we compare these results to runs of the serial Frid-Gusfield algorithm and parallel Frid-Gusfield algorithm.
+\par The most basic type of benchmark to perform is the micro-benchmark. The
+micro-benchmark is a single piece of code executed many times in serial so that
+we can get a profile of its run characteristics\cite{eulogy,sysperformance}.
+Once these characteristics are observed we can then make inferences about its
+performance and ways that it can be improved. Micro-benchmarks have the downside
+of losing generality of performance across the entire application\cite{eulogy, sysperformance}.
+A good example of this is if an IO heavy function made many consecutive calls to
+the \textit{read} function on the OS while the rest of the application made no
+calls to \textit{read} whatsoever. If we tried to generalize this one function to
+the rest of the application we would misguidedly attempt to optimize disk IO
+across our entire system.
+\par We avoid this trap in our paper by benchmarking only parts of the code that
+execute the Nussinov algorithm in mfold and the Vienna package. We then report
+these results back to our test results database for later analysis. After this we
+compare these results to runs of the serial Frid-Gusfield algorithm and parallel
+Frid-Gusfield algorithm.
 
 \subsection{Frid-Gusfield Four-Russians Algorithm}
 \par The Four-Russians Algorithm \cite{gusfield} is an algorithm to improve the above-mentioned Nussinov $O(n^3)$ Algorithm by Four-Russian method. The Frid and Gusfield is an $O(\frac{n^3}{\log n})$ algorithm.
 \par The Four Russian algorithm achieves this speed up by understanding that we can make certain optimizations to the matrix of matching base pairs required by the Nussinov algorithm. Particularly, the values along a column from bottom to top and along a row from left to right are monotonically non-decreasing. Consecutive cells differ at most by 1\cite{gusfield}. As a result we can perform pre-processing of specific operations that the Nussinov algorithm must compute manually.
+
+\par The Four-Russians Algorithm \cite{gusfield} is a two-vector algorithm to
+improve the above-mentioned Nussinov $O(n^3)$ Algorithm. The Frid and Gusfield
+is an $O(\frac{n^3}{\log n})$ algorithm. The Four Russian algorithm achieves
+this speed up by understanding that we can make certain optimizations to the
+matrix of matching base pairs required by the Nussinov algorithm. Particularly,
+the values along a column from bottom to top and along a row from left to right
+are monotonically non-decreasing. Consecutive cells differ at most by 1\cite{gusfield}.
+As a result we can perform pre-processing of specific operations that the
+Nussinov algorithm must compute manually.
 
 \subsection{CUDA Parallel Implementation for F-G Method}
 \par Compute Unified Device Architecture (CUDA) is a parallel computing platform created by NVIDIA. By using CUDA API, in Venkatachalam B \cite{balaji}, an $O(\frac{n^2}{logn})$ algorithm for RNA folding is presented.
