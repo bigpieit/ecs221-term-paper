@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[]{multicol}
 \usepackage[auth-lg]{authblk}
-\usepackage[margin=1.4in]{geometry}
+\usepackage[margin=1.2in]{geometry}
 \usepackage[]{graphicx}
 \usepackage[]{ctable}
 \usepackage[]{natbib}
@@ -31,7 +31,12 @@ the benefit of updating their algorithms. The results will also help guide users
 when choosing RNA folding software when looking for the most computationally optimal package.
 \end{abstract}
 \section{Introduction}
-\par RNA is an essential macromolecule used in protein formation and performs other essential functions within the body\cite{turner}. RNA does not stay in single stranded form and instead folds on itself to create the lowest energy conformation possible to ensure thermodynamic stability\cite{herschlag}. When folding, RNA forms a 2D secondary structure\cite{mccaskill} with A matching to U and G to C (figure 1).  Using this data we can find a 3D tertiary structure\cite{mccaskill}.
+\par RNA is an essential macromolecule used in protein formation and performs
+other essential functions within the body\cite{turner}. RNA does not stay in
+single stranded form and instead folds on itself to create the lowest energy
+conformation possible to ensure thermodynamic stability\cite{herschlag}. When
+folding, RNA forms a 2D secondary structure\cite{mccaskill} with A matching to U
+and G to C (figure 1).  Using this data we can find a 3D tertiary structure\cite{mccaskill}.
 \begin{figure}[ht!]
   \centering
   \includegraphics[keepaspectratio, scale=0.12]{fold-example.png}
@@ -175,18 +180,36 @@ Nussinov algorithm must compute manually.
 \par Compute Unified Device Architecture (CUDA) is a parallel computing platform created by NVIDIA. By using CUDA API, Venkatachalam presented an $O(\frac{n^2}{logn})$ algorithm for RNA folding is presented \cite{balaji}. The CUDA implementation parallelizes the two-vector method so that achieve an enhancement of another factor of $O(n)$.
 
 \section{Results}
-The timing for Nussinov, FG and CUDA Four-Russian algorithms are listed below with different sizes of RNA sequences.\\
-\begin{tabular}{ |p{1.5cm}||p{1.2cm}|p{1.3cm}|p{1.3cm}|p{1.4cm}|p{1.4cm}|p{1.4cm}|p{1.6cm}|  }
+
+\subsection{Application Benchmarks}
+\begin{tabular}{ |p{1.5cm}||p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}| p{1.2cm} | p{1.2cm} |}
  \hline
- \multicolumn{8}{|c|}{Timing of Algorithms for RNA Folding (sec.)} \\
+ \multicolumn{10}{|c|}{Timing of mfold for linear RNA (sec.)} \\
  \hline
- Size& 500& 1000& 2000& 3000& 4000& 5000& 6000\\
+ Size& 200& 300& 400& 500& 600& 700 & 800 & 900 & 1000\\
  \hline
- Nussinov& 0.2790& 2.0751& 16.7033& 57.8146& 145.2998& 301.4874& 519.6531\\
- Frid-Gusfield& 0.0903& 0.6092& 5.5868& 19.6117& 49.3309& 95.6461& 162.9072\\
- CUDA& 0.0088& 0.1988& 0.4690& 1.1943& 2.5817& 4.8506& 8.2735\\
+ N runs& 30 & 30& 30 & 30& 30& 30& 30& 30& 30\\
+ \hline
+ average& 2.523 & 6.635 & 6.313 & 8.336 & 10.492 & 9.384 & 12.212 & 14.319 & 14.402\\
+ std ($\sigma^2$) &0.343 & 0.251 & 0.180 & 0.547 & 0.144 & 0.094 & 0.176 & 0.118 & 0.211 \\
  \hline
 \end{tabular}\\
+
+\subsection{Micro-benchmarks}
+The timing for Nussinov, FG and CUDA Four-Russian algorithms are listed below with different sizes of RNA sequences.\\
+\begin{center}
+    \begin{tabular}{ |p{1.5cm}||p{1.2cm}|p{1.3cm}|p{1.3cm}|p{1.4cm}|p{1.4cm}|p{1.4cm}|p{1.6cm}|}
+     \hline
+     \multicolumn{8}{|c|}{Timing of Algorithms for RNA Folding (sec.)} \\
+     \hline
+     Size& 500& 1000& 2000& 3000& 4000& 5000& 6000\\
+     \hline
+     Nussinov& 0.2790& 2.0751& 16.7033& 57.8146& 145.2998& 301.4874& 519.6531\\
+     Frid-Gusfield& 0.0903& 0.6092& 5.5868& 19.6117& 49.3309& 95.6461& 162.9072\\
+     CUDA& 0.0088& 0.1988& 0.4690& 1.1943& 2.5817& 4.8506& 8.2735\\
+     \hline
+    \end{tabular}
+\end{center}\\
 \\
 \\
 The data are plotted visually as below:
