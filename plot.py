@@ -18,7 +18,7 @@ for i in range(4):
 	for k in content:
 		stdev[i].append(float(k))
 
-x=[i for i in range(200,1100,100)]
+x=[i for i in range(200,1200,100)]
 
 #plt.figure(figsize=(18, 6), dpi=100)
 
@@ -32,8 +32,8 @@ plt.xlabel('Size of RNA',fontsize=15)
 plt.ylabel('Time / s',fontsize=15)
 #plt.text(55000,0.91,r'$time \ =\ $'+str(time)+r'$\ ps$',color='k',fontsize=18)
 plt.grid(True)
-plt.xlim(100,1100)
-plt.xticks(np.linspace(100,1100,11, endpoint=True))
+plt.xlim(100,1200)
+plt.xticks(np.linspace(100,1200,11, endpoint=True))
 plt.legend(numpoints=15,prop={'size':18},loc="upper left",frameon=False)
 plt.savefig("l-m-v.png")
 plt.close()
@@ -54,7 +54,7 @@ plt.errorbar(x,value[3],yerr=stdev[3],color='g',label=r"$Vienna$")
 plt.xlabel('Size of RNA',fontsize=15)
 plt.ylabel('Time / s',fontsize=15)
 plt.grid(True)
-plt.xlim(100,1100)
-plt.xticks(np.linspace(100,1100,11, endpoint=True))
+plt.xlim(100,1200)
+plt.xticks(np.linspace(100,1200,11, endpoint=True))
 plt.legend(numpoints=15,prop={'size':18},loc="upper left",frameon=False)
 plt.savefig("c-m-v.png")
