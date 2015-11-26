@@ -7,6 +7,7 @@
 \usepackage[]{ctable}
 \usepackage[]{natbib}
 \usepackage[]{array}
+\usepackage[]{bm}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 
 \title{Benchmarking Current RNA Folding Software and Improvements to the Current Regime}
@@ -163,18 +164,14 @@ compare these results to runs of the serial Frid-Gusfield algorithm and parallel
 Frid-Gusfield algorithm.
 
 \subsection{Frid-Gusfield Four-Russians Algorithm}
-\par The Four-Russians Algorithm \cite{gusfield} is an algorithm to improve the above-mentioned Nussinov $O(n^3)$ Algorithm by Four-Russian method. The Frid and Gusfield is an $O(\frac{n^3}{\log n})$ algorithm.
-\par The Four Russian algorithm achieves this speed up by understanding that we can make certain optimizations to the matrix of matching base pairs required by the Nussinov algorithm. Particularly, the values along a column from bottom to top and along a row from left to right are monotonically non-decreasing. Consecutive cells differ at most by 1\cite{gusfield}. As a result we can perform pre-processing of specific operations that the Nussinov algorithm must compute manually.
-
-\par The Four-Russians Algorithm \cite{gusfield} is a two-vector algorithm to
-improve the above-mentioned Nussinov $O(n^3)$ Algorithm. The Frid and Gusfield
-is an $O(\frac{n^3}{\log n})$ algorithm. The Four Russian algorithm achieves
-this speed up by understanding that we can make certain optimizations to the
-matrix of matching base pairs required by the Nussinov algorithm. Particularly,
-the values along a column from bottom to top and along a row from left to right
-are monotonically non-decreasing. Consecutive cells differ at most by 1\cite{gusfield}.
-As a result we can perform pre-processing of specific operations that the
-Nussinov algorithm must compute manually.
+\par The Four-Russians Algorithm \cite{gusfield} is an algorithm to improve the
+above-mentioned Nussinov $O(n^3)$ Algorithm by Four-Russian method. The Frid and Gusfield
+is an $O(\frac{n^3}{\log n})$ algorithm. The Four Russian algorithm achieves this
+speed up by understanding that we can make certain optimizations to the matrix of
+matching base pairs required by the Nussinov algorithm. Particularly, the values
+along a column from bottom to top and along a row from left to right are monotonically
+non-decreasing. Consecutive cells differ at most by 1\cite{gusfield}. As a result we can
+perform pre-processing of specific operations that the Nussinov algorithm must compute manually.
 
 \subsection{CUDA Parallel Implementation for F-G Method}
 \par Compute Unified Device Architecture (CUDA) is a parallel computing platform created by NVIDIA. By using CUDA API, Venkatachalam presented an $O(\frac{n^2}{logn})$ algorithm for RNA folding is presented \cite{balaji}. The CUDA implementation parallelizes the two-vector method so that achieve an enhancement of another factor of $O(n)$.
@@ -182,20 +179,22 @@ Nussinov algorithm must compute manually.
 \section{Results}
 
 \subsection{Application Benchmarks}
-In this part, we performed the benchmark for two packages under Dynamic Programing (DP) paradigm with both linear and circular RNA. The packages that we are interested in are \textit{Vienna Package} \cite{vienna} and \textit{m-fold} package \cite{zuker1989,zuker1981}. And their capacities to predict the secondary structure of RNA are tested with two types of RNA at different length.
-
-For the benchmark of linear type of RNA, we select the RNA of the size, ranging from 200 nucleotides to 1000 nucleotides. The test is performed for 30 times for each size in order to derive the mean time and standard deviation. The time to fold these structures are compared in the following Table 1.
+\par In this part, we performed the benchmark for two packages using the Dynamic Programing (DP) paradigm with
+both linear and circular RNA. We report the number of RNA bases or \textbf{size}, the number of times the folding
+program was run with our specific input or \textbf{N runs}, the mean timing of the runs as \boldsymbol{$\mu$}, and the standard deviation of the
+runs denoted as \boldsymbol{$\sigma^2$}. For the benchmarking of both linear and circular types of RNA, we select the RNA of the size,
+ranging from 200 nucleobases to 1000 nucleobases. The time to fold these structures are compared in the following Table 1.
 \begin{table}[h!]
     \begin{tabular}{ |p{1.5cm}||p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}| p{1.05cm} | p{1.05cm} |}
     \hline
     \multicolumn{10}{|c|}{Timing of \textit{m-fold} package for linear RNA (sec.)} \\
     \hline
-    Size& 200& 300& 400& 500& 600& 700 & 800 & 900 & 1000\\
+    size& 200& 300& 400& 500& 600& 700 & 800 & 900 & 1000\\
     \hline
     N runs& 30 & 30& 30 & 30& 30& 30& 30& 30& 30\\
     \hline
-    average& 2.523 & 6.635 & 6.313 & 8.336 & 10.492 & 9.384 & 12.212 & 14.319 & 14.402\\
-    std ($\sigma^2$) &0.343 & 0.251 & 0.180 & 0.547 & 0.144 & 0.094 & 0.176 & 0.118 & 0.211 \\
+    $\mu$& 2.523 & 6.635 & 6.313 & 8.336 & 10.492 & 9.384 & 12.212 & 14.319 & 14.402\\
+    $\sigma^2$ &0.343 & 0.251 & 0.180 & 0.547 & 0.144 & 0.094 & 0.176 & 0.118 & 0.211 \\
     \hline
     \end{tabular}
 
@@ -203,77 +202,78 @@ For the benchmark of linear type of RNA, we select the RNA of the size, ranging 
     \hline
     \multicolumn{10}{|c|}{Timing of $Vienna$ for linear RNA (sec.)} \\
     \hline
-    Size& 200& 300& 400& 500& 600& 700 & 800 & 900 & 1000\\
+    size& 200& 300& 400& 500& 600& 700 & 800 & 900 & 1000\\
     \hline
     N runs& 30 & 30& 30 & 30& 30& 30& 30& 30& 30\\
     \hline
-    average& 0.029 & 0.072 & 0.112 & 0.163 & 0.508 & 0.491 & 1.934 & 11.723 & 8.296\\
-    std ($\sigma^2$) &0.006 & 0.001 & 0.001 & 0.001 & 0.002 & 0.002 & 0.006 & 0.336 & 0.011 \\
+    $\mu$& 0.029 & 0.072 & 0.112 & 0.163 & 0.508 & 0.491 & 1.934 & 11.723 & 8.296\\
+    $\sigma^2$ &0.006 & 0.001 & 0.001 & 0.001 & 0.002 & 0.002 & 0.006 & 0.336 & 0.011 \\
     \hline
     \end{tabular}
 \caption{The time taken by two packages to predict secondary structures of linear RNA of different length.}
 \end{table}
 
-In a more vivid way, the plot of the bechmark time for linear RNA are shown in the Fig 3.\\
+In a more vivid way, the plot of the bechmark time for linear RNA is shown in the Fig 3.\\
+
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=0.75\textwidth]{l-m-v.png}
     \caption{Benchmark of \textit{Vienna} and \textit{m-fold} packages with linear RNA of different sizes.}
 \end{figure}
 
-When the size of RNA is within 1000 nucleotides, the \textit{Vienna} packages is more efficient than the \textit{m-fold} package. But the \textit{Vienna} package increases faster than the \textit{m-fold} package. Probably, the \textit{Vienna} Package is not advantageous to predict the secondary structure of super large RNA.
-
-Moreover, the benchmark circular type of RNA is also performed here. In this test, the size of the RNA is between 200 nucleotides to 1000 nucleotides. The time in seconds to determine their secondary structures are listed in the following Table 2.
+We can clearly see that \textit{m-fold} takes the most time to complete. However as mentioned before, Vienna
+is optimized to handle linear RNA so these results are not necessarily surprising. We benchmark circular
+RNA. The time in seconds to determine their secondary structures are listed in the following Table 2.
 
 \begin{table}[h!]
 \begin{center}
-\begin{tabular}{ |p{1.5cm}||p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}| p{1.05cm} | p{1.05cm} |}
-\hline
-\multicolumn{10}{|c|}{Timing of \textit{m-fold} package for circular RNA (sec.)} \\
-\hline
-Size& 200& 300& 400& 500& 600& 700 & 800 & 900 & 1000\\
-\hline
-N runs& 30 & 30& 30 & 30& 30& 30& 30& 30& 30\\
-\hline
-average& 2.409 & 6.633 & 6.269 & 8.889 & 11.274 & 9.074 & 11.358 & 14.678 &16.712\\
-std ($\sigma^2$) & 0.060 & 0.354 & 0.362 & 0.159 & 0.1176 & 0.161 & 0.364 & 0.1999 & 0.285 \\
-\hline
-\end{tabular}
-\begin{tabular}{ |p{1.5cm}||p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}| p{1.05cm} | p{1.05cm} |}
-\hline
-\multicolumn{10}{|c|}{Timing of \textit{Vienna} for circular RNA (sec.)} \\
-\hline
-Size& 200& 300& 400& 500& 600& 700 & 800 & 900 & 1000\\
-\hline
-N runs& 30 & 30& 30 & 30& 30& 30& 30& 30& 30\\
-\hline
-average& 0.027 & 0.084 & 0.129 & 0.153 & 0.664 & 0.351 & 1.943 & 7.915 & 50.15\\
-std ($\sigma^2$) & 0.002 & 0.001 & 0.001 & 0.002 & 0.002 & 0.002 & 0.006 & 0.036 & 0.126 \\
-\hline
-\end{tabular}
+    \begin{tabular}{ |p{1.5cm}||p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}| p{1.05cm} | p{1.05cm} |}
+    \hline
+    \multicolumn{10}{|c|}{Timing of \textit{m-fold} package for circular RNA (sec.)} \\
+    \hline
+    Size& 200& 300& 400& 500& 600& 700 & 800 & 900 & 1000\\
+    \hline
+    N runs& 30 & 30& 30 & 30& 30& 30& 30& 30& 30\\
+    \hline
+    average& 2.409 & 6.633 & 6.269 & 8.889 & 11.274 & 9.074 & 11.358 & 14.678 &16.712\\
+    std ($\sigma^2$) & 0.060 & 0.354 & 0.362 & 0.159 & 0.1176 & 0.161 & 0.364 & 0.1999 & 0.285 \\
+    \hline
+    \end{tabular}
+    \begin{tabular}{ |p{1.5cm}||p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}| p{1.05cm} | p{1.05cm} |}
+    \hline
+    \multicolumn{10}{|c|}{Timing of \textit{Vienna} for circular RNA (sec.)} \\
+    \hline
+    Size& 200& 300& 400& 500& 600& 700 & 800 & 900 & 1000\\
+    \hline
+    N runs& 30 & 30& 30 & 30& 30& 30& 30& 30& 30\\
+    \hline
+    average& 0.027 & 0.084 & 0.129 & 0.153 & 0.664 & 0.351 & 1.943 & 7.915 & 50.15\\
+    std ($\sigma^2$) & 0.002 & 0.001 & 0.001 & 0.002 & 0.002 & 0.002 & 0.006 & 0.036 & 0.126 \\
+    \hline
+    \end{tabular}
 \end{center}
 \caption{The time taken by two packages to predict secondary structures of circular RNA of different length.}
 \end{table}
 
-The following Fig 4 is plotted to better visualize how the two packages compete with each other. The \textit{Vienna} can do a more efficient prediction when the circular RNA has nucleotides smaller than 950. As the operations required for \textit{Vienna} prediction increases rapidly for RNA longer than 900 nucleotides, the \textit{Vienna} package loses its advantages. And the \textit{m-fold} package demonstrates better performance.
-
+The following Fig 4 is plotted to better visualize how the two packages compete with each other.
 \begin{figure}[htbp!]
 \centering
 \includegraphics[width=0.75\textwidth]{c-m-v.png}
 \caption{Benchmark of \textit{Vienna} and \textit{m-fold} with circular RNA of different sizes.}
 \end{figure}
 
-Through the above benchmark analysis, we have developed a clear insight into the performance of two packages, \textit{Vienna} and \textit{m-fold} packages. Linear and circular types of RNA have been well tested at several length. In both of the cases, the \textit{Vienna} packages is time-optimal for small RNA no larger than 900 nucleotides. However, this package loses its advantages to \textit{m-fold} after 1000 nucleotides.
+As we can see Vienna initially outperforms \textit{m-fold} but as RNA size hits 1000 bases the time to
+complete the folding increases dramatically. So it appears the optimizations made to Vienna by Hofacker and
+Stadler\cite{circular} break down around 1000 nucleobases.
 
 \subsection{Micro-benchmarks}
-\par We obtained the source code from \cite{gusfield} and \cite{balaji}, and executed them on the above mentioned machine with different sizes of RNA sequences ranging from 500 to 6000. The data are presented in Table ~\ref{table:timingAlgorithm}.
-\begin{table}
+The timing for Nussinov, Frid-Gusfield (FG), and CUDA Four-Russian algorithms are listed below with different sizes of RNA sequences 500 to 6000. The data is presented in Table ~\ref{table:timingAlgorithm}.\\
 \begin{center}
     \begin{tabular}{ |p{1.5cm}||p{1.2cm}|p{1.3cm}|p{1.3cm}|p{1.4cm}|p{1.4cm}|p{1.4cm}|p{1.6cm}|}
      \hline
      \multicolumn{8}{|c|}{Timing of Algorithms for RNA Folding (sec.)} \\
      \hline
-     Size& 500& 1000& 2000& 3000& 4000& 5000& 6000\\
+     size& 500& 1000& 2000& 3000& 4000& 5000& 6000\\
      \hline
      Nussinov& 0.2790& 2.0751& 16.7033& 57.8146& 145.2998& 301.4874& 519.6531\\
      F-G& 0.0903& 0.6092& 5.5868& 19.6117& 49.3309& 95.6461& 162.9072\\
@@ -293,9 +293,23 @@ Through the above benchmark analysis, we have developed a clear insight into the
 \end{figure}
 
 \section{Discussion}
-In this paper, we performed both application and micro benchmark for current packages and some popular methods available for RNA secondary structure prediction problem, namely, RNA folding.
+In this paper, we performed both application and micro benchmark for current packages and some popular
+methods available for RNA secondary structure prediction problem, namely, RNA folding. For the
+application benchmark, \textit{RNAfold Vienna} and \textit{m-fold} have been applied to predict
+the secondary structure of both linear and circular RNA. In both linear and circular cases, the
+\textit{Vienna} package is clearly optimal for chains of RNA smaller than 900 bases.  While
+\textit{m-fold} is time optimal in the prediction of circular RNA structures of 1000 nucleobases and likely for greater numbers of bases.
+However further amounts of testing is necessary
+this conclusion can be further confirmed by testing more $RNA$ sequences at the same length. Although
+the two packages are all based on Dynamical Programming paradigm, their average performance may be
+different. The difference might come from the ways how they implement the DP algorithm. For example,
+the code used for packages and the I/O management are probably the main reasons for this difference.
 
-For application benchmark, \textit{Vienna} and \textit{m-fold} has been applied to predict two types of RNA. In both linear and circular cases, the \textit{Vienna} package has better performance while the \textit{m-fold} is time optimal in the prediction of RNA larger than 1000 nucleotides. However, this conclusion can be further confirmed by testing more $RNA$ sequences at the same length. Although the two packages are all based on Dynamical Programming paradigm, their average performance may be different. The difference might come from the ways how they implement the DP algorithm. For example, the code used for packages and the I/O management are probably the main reasons for this difference.
+When the size of RNA is within 1000 nucleobases, the \textit{Vienna} packages is more efficient than the \textit{m-fold} package. But the \textit{Vienna} package increases faster than the \textit{m-fold} package. Probably, the \textit{Vienna} Package is not advantageous to predict the secondary structure of super large RNA.
+
+The \textit{Vienna} can do a more efficient prediction when the circular RNA has nucleobases smaller than 950. As the operations required for \textit{Vienna} prediction increases rapidly for RNA longer than 900 nucleobases, the \textit{Vienna} package loses its advantages. And the \textit{m-fold} package demonstrates better performance.
+
+Through the above benchmark analysis, we have developed a clear insight into the performance of two packages, \textit{Vienna} and \textit{m-fold} packages. Linear and circular types of RNA have been well tested at several length. In both of the cases, the \textit{Vienna} packages is time-optimal for small RNA no larger than 900 nucleobases. However, this package loses its advantages to \textit{m-fold} after 1000 nucleobases.
 
 When we come to the micro-benchmark, we found that the preliminary \textit{Nussinov} DP method is significantly slowing down in the cases that the number of nucleotides in the RNA sequence is more than 3000. That's intrinsically caused by its $O(log(n^3))$ time complexity characteristic. While \textit{F-G} method \cite{gusfield} has enhanced the performance by a factor of $log(n)$, in some cases the speed is still not satisfactory for long RNA sequences. With the introduction of \textit{CUDA} onto two-vector method invented by \cite{balaji}, we almost achieve a linearly increasing time complexity for different size of RNA sequences, which is quite impressive.
 
