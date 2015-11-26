@@ -8,6 +8,7 @@
 \usepackage[]{natbib}
 \usepackage[]{array}
 \usepackage[]{bm}
+\usepackage[]{float}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 
 \title{Benchmarking Current RNA Folding Software and Improvements to the Current Regime}
@@ -64,7 +65,7 @@ and the Vienna RNA Package\cite{vienna}. These both utilize the Nussimov method
 to return results of the RNA secondary structure by finding the lowest possible
 thermodynamic conformations of the RNA\cite{zuker1981,vienna}. In order to tell
 which was faster we performed application level benchmarks\cite{eulogy} to see
-which of these two applications could more quickly fold arbitrary length RNA of
+which of these two applications could more quickly fold RNA of
 the circular and linear variety. The way mfold is written allows linear RNA to
 be treated as exceptional variants of circular ones\cite{circular}. RNAfold
 Vienna was initially optimized to only handle linear RNA\cite{circular} but
@@ -72,14 +73,15 @@ later improvements enabled it to speed the folding of circular ones\cite{circula
 As a result we wished to determine what kind of speed difference still exists
 between mfold and Vienna when performing analysis on circular RNA. To see how
 these folding applications could benefit from replacing their use of the Nussinov
-method with newer ones we then performed micro-benchmarks\cite{sysperformance} of the Nussinov, the
-serial Frid-Gusfield method, and the parallel Four Russians method.
+method with newer ones we then performed micro-benchmarks\cite{sysperformance} of the Nussinov,
+the serial Frid-Gusfield method, and the parallel Four Russians method.
 
 \par Our main finding when performing application benchmarks on mfold and
 Vienna was that Vienna is significantly faster than mfold for linear and cicular
 RNA strands of 900 nucleobases. For micro-benchmarks we found that the Frid Gusfield method
 returned results much faster than the Nussinov method especially for larger strands of RNA. However
-the parallel Four Russians CUDA algorithm returned results significantly quicker than the other serial methods. The results of the micro-benchmarks show that both mfold and RNAfold Vienna could experience
+the parallel Four Russians CUDA algorithm returned results significantly quicker than the other serial
+methods. The results of the micro-benchmarks show that both mfold and RNAfold Vienna could experience
 significant speed increases if they implemented the Frid-Gusfield method. Furthermore
 the authors of this paper would recommend both software packages to support GPU
 hardware to achieve even greater speed gains when inside a parallel capable
@@ -149,7 +151,8 @@ corresponding to each sequence length.
 micro-benchmark is a single piece of code executed many times in serial so that
 we can get a profile of its run characteristics\cite{eulogy,sysperformance}.
 Once these characteristics are observed we can then make inferences about its
-performance and ways that it can be improved. Micro-benchmarks have the downside
+performance and ways that it can be improved.
+\par Micro-benchmarks have the downside
 of losing generality of performance across the entire application\cite{eulogy, sysperformance}.
 A good example of this is if an IO heavy function made many consecutive calls to
 the \textit{read} function on the OS while the rest of the application made no
@@ -212,19 +215,19 @@ ranging from 200 nucleobases to 1000 nucleobases. The time to fold these structu
 \caption{The time taken by two packages to predict secondary structures of linear RNA of different length.}
 \end{table}
 
-In a more vivid way, the plot of the bechmark time for linear RNA is shown in the Fig 3.\\
-
-\begin{figure}[htbp!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{l-m-v.png}
     \caption{Benchmark of \textit{Vienna} and \textit{m-fold} packages with linear RNA of different sizes.}
+    \label{fig:linear}
 \end{figure}
 
-We can clearly see that \textit{m-fold} takes the most time to complete. However as mentioned before, Vienna
-is optimized to handle linear RNA so these results are not necessarily surprising. We benchmark circular
-RNA. The time in seconds to determine their secondary structures are listed in the following Table 2.
+We can see from Figure \ref{fig:linear}. that \textit{m-fold} takes the most time to complete. However as mentioned before, Vienna
+is optimized to handle linear RNA so these results are not necessarily surprising.
+We benchmark circular RNA. The execution time to determine their secondary structures are listed in the following Table 2.
 
-\begin{table}[h!]
+\begin{table}[H]
+\begin{center}
     \begin{tabular}{ |p{1.5cm}||p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}|p{1.05cm}| p{1.05cm} | p{1.05cm} |}
     \hline
     \multicolumn{10}{|c|}{Timing of \textit{m-fold} package for circular RNA (sec.)} \\
@@ -250,22 +253,21 @@ RNA. The time in seconds to determine their secondary structures are listed in t
     \hline
     \end{tabular}
 \caption{The time taken by two packages to predict secondary structures of circular RNA of different length.}
+\end{center}
 \end{table}
-
-The following Fig 4 is plotted to better visualize how the two packages compete with each other.
-\begin{figure}[htbp!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{c-m-v.png}
     \caption{Benchmark of \textit{Vienna} and \textit{m-fold} with circular RNA of different sizes.}
+    \label{fig:circular}
 \end{figure}
-
-As we can see Vienna initially outperforms \textit{m-fold} but as RNA size hits 1000 bases the time to
+As we can see from Figure \ref{fig:circular} Vienna initially outperforms \textit{m-fold} but as RNA size hits 1000 bases the time to
 complete the folding increases dramatically. So it appears the optimizations made to Vienna by Hofacker and
 Stadler\cite{circular} break down around 1000 nucleobases.
 
 \subsection{Micro-benchmarks}
 The timing for Nussinov, Frid-Gusfield (FG), and CUDA Four-Russian algorithms are listed below with different sizes of RNA sequences 500 to 6000. The data is presented in Table ~\ref{table:timingAlgorithm}.\\
-\begin{table}
+\begin{table}[H]
 \begin{center}
     \begin{tabular}{ |p{1.5cm}||p{1.2cm}|p{1.3cm}|p{1.3cm}|p{1.4cm}|p{1.4cm}|p{1.4cm}|p{1.6cm}|}
      \hline
@@ -282,10 +284,10 @@ The timing for Nussinov, Frid-Gusfield (FG), and CUDA Four-Russian algorithms ar
 \caption{The time take by \textit{Nussinov}, \textit{F-G} and \textit{CUDA} to construct the secondary structures of RNA of different size.}
 \label{table:timingAlgorithm}
 \end{table}
-\par By plotting Figure ~\ref{fig:timingAlgorithm}, we observe the \textit{F-G} method has a vast advantage
+\par By plotting Figure \ref{fig:timingAlgorithm}, we observe the \textit{F-G} method has a vast advantage
 over \textit{Nussinov} when the size of RNA sequence is larger than 3000, and the \textit{CUDA} method
 becomes much more useful around this point as well.
-\begin{figure}[ht!]
+\begin{figure}[H]
   \centering
   \includegraphics[keepaspectratio, scale=.6]{algorithmGraph.png}
   \caption{Timing of Algorithms for RNA Folding (sec.)}
@@ -330,6 +332,11 @@ application setting. As a result implementation of an improved folding algorithm
 or the parallel Four Russians introduced by Venkatachalam is imperative especially as we discover more,
 and longer chains of RNA that are biologically significant.
 
+\section{Author Contributions}
+Bingxi Li contributed to running RNAfold Vienna and providing benchmarking results. Jianglin Liu ran the
+micro-benchmark algorithms and provided results. Gregory Rehm ran the mfold application benchmarks
+performed background research on both RNA folding software and benchmarking, and provided the run methodology
+for our experiments.
 \begin{thebibliography}{56}
 \bibitem{gusfield}
 Frid Y, Gusfield D.
