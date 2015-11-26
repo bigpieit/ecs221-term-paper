@@ -303,7 +303,7 @@ application benchmark, \textit{RNAfold Vienna} and \textit{m-fold} have been app
 the secondary structure of both linear and circular RNA. In both linear and circular cases, the
 \textit{Vienna} package is clearly optimal for almost all chains of RNA of both linear and circular types.  While
 \textit{m-fold} is time optimal in the folding of our single circular RNA strand of 1000 nucleobases. We
-believe this to be an abberation brought on by differences in the ways that \textit{mfold} and \texit{Vienna}
+believe this to be an abberation brought on by differences in the ways that \textit{mfold} and \textit{Vienna}
 both handle the evaluations of their thermodynamic models. We conclude that while on a whole Vienna will
 be faster than mfold there exist strands of RNA that mfold is more adept at handling especially ones of the
 circular type given mfold is more properly architected to handle circular RNA.
@@ -337,10 +337,10 @@ or the parallel Four Russians introduced by Venkatachalam is imperative especial
 and longer chains of RNA that are biologically significant.
 
 \section{Author Contributions}
-Bingxi Li contributed to running RNAfold Vienna and providing benchmarking results. Jianglin Liu ran the
-micro-benchmark algorithms and provided results. Gregory Rehm ran the mfold application benchmarks,
-performed background research on both RNA folding software and benchmarking, and provided the run methodology
-for our experiments.
+Bingxi Li contributed to forming the initial search focus, running RNAfold Vienna and providing benchmarking results. 
+Jianglin Liu set up CUDA environment, repaired the source code for micro-benchmark algorithms, and run them and provided 
+results. Gregory Rehm ran the mfold application benchmarks, performed background research on both RNA folding software 
+and benchmarking, and provided the run methodology for our experiments.
 \begin{thebibliography}{56}
 \bibitem{gusfield}
 Frid Y, Gusfield D.
